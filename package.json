@@ -1,0 +1,87 @@
+{
+  "name": "n8n-nodes-vechain",
+  "version": "1.0.0",
+  "description": "A comprehensive n8n community node for VeChain blockchain providing 9 resources and 60+ operations for VET/VTHO transfers, VIP-180/181 tokens, smart contracts, multi-clause transactions, and fee delegation.",
+  "keywords": [
+    "n8n-community-node-package",
+    "n8n",
+    "vechain",
+    "blockchain",
+    "vet",
+    "vtho",
+    "vip180",
+    "vip181",
+    "nft",
+    "smart-contracts",
+    "supply-chain",
+    "toolchain",
+    "fee-delegation",
+    "multi-clause",
+    "enterprise"
+  ],
+  "license": "BUSL-1.1",
+  "homepage": "https://velobpa.com",
+  "author": {
+    "name": "Velocity BPA",
+    "email": "licensing@velobpa.com",
+    "url": "https://velobpa.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Velocity-BPA/n8n-nodes-vechain.git"
+  },
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "prebuild": "rimraf dist",
+    "build": "tsc && gulp build:icons",
+    "dev": "tsc --watch",
+    "lint": "eslint nodes credentials --ext .ts",
+    "lint:fix": "eslint nodes credentials --ext .ts --fix",
+    "format": "prettier --write \"**/*.ts\"",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "prepublishOnly": "npm run build"
+  },
+  "files": [
+    "dist"
+  ],
+  "n8n": {
+    "n8nNodesApiVersion": 1,
+    "credentials": [
+      "dist/credentials/VechainNetwork.credentials.js",
+      "dist/credentials/VechainApi.credentials.js",
+      "dist/credentials/FeeDelegation.credentials.js"
+    ],
+    "nodes": [
+      "dist/nodes/Vechain/Vechain.node.js",
+      "dist/nodes/Vechain/VechainTrigger.node.js"
+    ]
+  },
+  "devDependencies": {
+    "@types/jest": "^29.5.11",
+    "@types/node": "^20.10.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "eslint": "^8.55.0",
+    "eslint-config-prettier": "^9.1.0",
+    "gulp": "^4.0.2",
+    "jest": "^29.7.0",
+    "n8n-workflow": "^1.20.0",
+    "prettier": "^3.1.0",
+    "rimraf": "^5.0.5",
+    "ts-jest": "^29.1.1",
+    "typescript": "^5.3.2"
+  },
+  "dependencies": {
+    "axios": "^1.6.2",
+    "ethers": "^6.9.0",
+    "thor-devkit": "^2.0.9"
+  },
+  "peerDependencies": {
+    "n8n-workflow": ">=1.20.0"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

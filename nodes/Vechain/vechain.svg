@@ -1,0 +1,12 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 128 128">
+  <defs>
+    <linearGradient id="vechainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#15BDFF;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1A5CFF;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <circle cx="64" cy="64" r="60" fill="url(#vechainGrad)"/>
+  <path d="M64 20L40 90h10l14-50 14 50h10L64 20z" fill="white"/>
+  <path d="M51 70l-6 20h6l3-10 3 10h6l-6-20h-6z" fill="white" opacity="0.8"/>
+  <text x="64" y="108" text-anchor="middle" font-family="Arial, sans-serif" font-size="12" font-weight="bold" fill="white">VeChain</text>
+</svg>

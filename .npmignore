@@ -1,0 +1,38 @@
+# Source files
+*.ts
+!*.d.ts
+
+# Config files
+.eslintrc.js
+.prettierrc
+tsconfig.json
+gulpfile.js
+jest.config.js
+
+# Development files
+.git/
+.github/
+test/
+scripts/
+coverage/
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Logs
+*.log
+npm-debug.log*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Build artifacts
+*.map
+
+# Other
+COMMERCIAL_LICENSE.md
+LICENSING_FAQ.md
