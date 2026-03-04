@@ -8,379 +8,190 @@
 >
 > For licensing information, visit https://velobpa.com/licensing or contact licensing@velobpa.com.
 
-A comprehensive n8n community node package for interacting with the **VeChain blockchain**. This node provides full support for VET/VTHO transfers, VIP-180 tokens, VIP-181 NFTs, smart contracts, multi-clause transactions, fee delegation, and enterprise features.
+An n8n community node that provides seamless integration with the VeChain blockchain network. This node includes 6 comprehensive resources (Blocks, Transactions, Accounts, Tokens, Contracts, Events) enabling developers to build powerful blockchain automation workflows for supply chain, IoT, and enterprise applications on VeChain's dual-token ecosystem.
 
-[![npm version](https://badge.fury.io/js/n8n-nodes-vechain.svg)](https://www.npmjs.com/package/n8n-nodes-vechain)
-[![License: BSL 1.1](https://img.shields.io/badge/License-BSL%201.1-blue.svg)](LICENSE)
+![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blue)
+![License](https://img.shields.io/badge/license-BSL--1.1-blue)
+![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)
+![VeChain](https://img.shields.io/badge/VeChain-Thor-00d4ff)
+![Blockchain](https://img.shields.io/badge/Blockchain-Enterprise-green)
+![Supply Chain](https://img.shields.io/badge/Supply%20Chain-Ready-orange)
 
 ## Features
 
-### VeChain Blockchain Support
-- **Dual Token Model**: VET (value) + VTHO (energy/gas)
-- **Multi-Clause Transactions**: Batch multiple operations in a single atomic transaction
-- **Fee Delegation (VIP-191)**: Third-party gas payment support
-- **PoA 2.0 Consensus**: 101 authority masternodes with ~10s block time
-
-### Token Standards
-- **VIP-180**: Fungible token standard (similar to ERC-20)
-- **VIP-181**: Non-fungible token standard (similar to ERC-721)
-
-### Networks Supported
-- **Mainnet**: Production VeChain network
-- **Testnet**: Test network for development
-- **Thor Solo**: Local development node
-- **Custom**: Connect to any VeChain-compatible node
+- **Block Operations** - Query block data, retrieve block details, and monitor blockchain height
+- **Transaction Management** - Send transactions, check transaction status, and retrieve transaction history
+- **Account Operations** - Get account balances, manage VET/VTHO tokens, and monitor account activity
+- **Token Integration** - Interact with VIP-180 tokens, check balances, and perform token transfers
+- **Smart Contract Interaction** - Deploy contracts, call contract methods, and monitor contract events
+- **Event Monitoring** - Subscribe to blockchain events, filter logs, and track contract emissions
+- **Dual-Token Support** - Full support for VET and VTHO token operations
+- **Enterprise Ready** - Built for supply chain and IoT use cases with robust error handling
 
 ## Installation
 
 ### Community Nodes (Recommended)
 
-1. Open your n8n instance
+1. Open n8n
 2. Go to **Settings** → **Community Nodes**
-3. Click **Install**
+3. Click **Install a community node**
 4. Enter `n8n-nodes-vechain`
 5. Click **Install**
 
 ### Manual Installation
 
 ```bash
-# Navigate to your n8n installation
 cd ~/.n8n
-
-# Install the package
 npm install n8n-nodes-vechain
-
-# Restart n8n
 ```
 
 ### Development Installation
 
 ```bash
-# Clone the repository
 git clone https://github.com/Velocity-BPA/n8n-nodes-vechain.git
 cd n8n-nodes-vechain
-
-# Install dependencies
 npm install
-
-# Build the project
 npm run build
-
-# Create symlink to n8n custom nodes directory
 mkdir -p ~/.n8n/custom
 ln -s $(pwd) ~/.n8n/custom/n8n-nodes-vechain
-
-# Restart n8n
 n8n start
 ```
 
 ## Credentials Setup
 
-### VeChain Network Credentials
+| Field | Description | Required |
+|-------|-------------|----------|
+| API Key | VeChain Thor node API key for authenticated requests | Yes |
+| Network | Network selection (MainNet/TestNet) | Yes |
+| Node URL | Custom VeChain Thor node URL (optional) | No |
+| Private Key | Wallet private key for transaction signing | No* |
 
-Configure your network connection and wallet:
-
-| Field | Description |
-|-------|-------------|
-| Network | Select mainnet, testnet, solo, or custom |
-| Node URL | Custom node URL (for custom network) |
-| Private Key | Your wallet private key (hex format) |
-| Delegator URL | Optional fee delegation service URL |
-
-### VeChain API Credentials
-
-For enhanced features and analytics:
-
-| Field | Description |
-|-------|-------------|
-| API Type | VeChainStats, ToolChain, or VeExplorer |
-| API Key | Your API key for the selected service |
-
-### Fee Delegation Credentials
-
-For gas-free transactions:
-
-| Field | Description |
-|-------|-------------|
-| Delegation Type | Service, Self-Sponsor, or VeChain Energy |
-| Service URL | Delegation service endpoint |
-| Sponsor Private Key | Key for self-sponsoring |
+*Required only for operations that send transactions
 
 ## Resources & Operations
 
-### VeChain Node (Action Node)
+### 1. Blocks
 
-#### Account Operations
-- Get Account Info
-- Get VET Balance
-- Get VTHO Balance
-- Validate Address
-- Calculate VTHO Generation
-- Check if Contract
+| Operation | Description |
+|-----------|-------------|
+| Get Block | Retrieve block information by number or hash |
+| Get Latest Block | Get the most recent block on the blockchain |
+| Get Block Range | Fetch multiple blocks within a specified range |
+| Get Block Transactions | List all transactions in a specific block |
 
-#### Transaction Operations
-- Send VET
-- Send VTHO
-- Get Transaction
-- Get Receipt
-- Get Status
-- Estimate Gas
-- Build Transaction
-- Sign Transaction
-- Send Raw Transaction
-- Multi-Clause Transaction
-- Simulate Transaction
+### 2. Transactions
 
-#### VET Operations
-- Get Balance
-- Transfer VET
-- Multi-Transfer VET
-- Estimate Transfer Fee
+| Operation | Description |
+|-----------|-------------|
+| Send Transaction | Broadcast a new transaction to the network |
+| Get Transaction | Retrieve transaction details by hash |
+| Get Transaction Receipt | Get transaction execution receipt and logs |
+| Get Account Transactions | List transactions for a specific account |
+| Estimate Gas | Calculate gas requirements for a transaction |
 
-#### VTHO Operations
-- Get Balance
-- Transfer VTHO
-- Get Total Supply
-- Get Total Burned
-- Approve Spending
-- Get Allowance
-- Calculate Generation
+### 3. Accounts
 
-#### VIP-180 Token Operations
-- Get Token Info
-- Get Balance
-- Transfer
-- Approve
-- Get Allowance
-- Transfer From
-- Get Total Supply
+| Operation | Description |
+|-----------|-------------|
+| Get Balance | Retrieve VET balance for an account |
+| Get Energy Balance | Get VTHO (energy) balance for an account |
+| Get Account Details | Fetch comprehensive account information |
+| Get Code | Retrieve smart contract code for contract accounts |
+| Get Storage | Query contract storage values |
 
-#### VIP-181 NFT Operations
-- Get Collection Info
-- Get Owner
-- Get Balance
-- Get Token URI
-- Get Tokens by Owner
-- Transfer
-- Safe Transfer
-- Approve
-- Set Approval For All
-- Get Approved
-- Is Approved For All
+### 4. Tokens
 
-#### Smart Contract Operations
-- Read (Call)
-- Write (Send)
-- Deploy
-- Get Code
-- Get Storage
-- Encode Function
-- Decode Result
-- Simulate
-- Estimate Gas
+| Operation | Description |
+|-----------|-------------|
+| Get Token Balance | Check VIP-180 token balance for an account |
+| Transfer Tokens | Send VIP-180 tokens between accounts |
+| Get Token Info | Retrieve token metadata and specifications |
+| Get Token Holders | List accounts holding a specific token |
+| Get Token Transfers | Query token transfer history |
 
-#### Block Operations
-- Get Block
-- Get Best Block
-- Get Finalized Block
-- Get Genesis Block
-- Get Block Transactions
-- Get Block Height
-- Check Finality
-- Get Block Range
+### 5. Contracts
 
-#### Utility Operations
-- Convert VET Units
-- Convert VTHO Units
-- Validate Address
-- Generate Keypair
-- Generate from Mnemonic
-- Get Address from Private Key
-- Sign Message
-- Verify Signature
-- Hash Data
-- Get Block Ref
-- Get Network Info
-- Calculate VTHO Cost
-- Checksum Address
+| Operation | Description |
+|-----------|-------------|
+| Deploy Contract | Deploy a new smart contract to the blockchain |
+| Call Method | Execute a smart contract method |
+| Query Method | Read data from a smart contract (view functions) |
+| Get Events | Retrieve events emitted by a contract |
+| Get Contract Info | Fetch contract metadata and ABI |
 
-## Trigger Node
+### 6. Events
 
-### VeChain Trigger
-
-Monitor blockchain events in real-time:
-
-- **New Block**: Trigger on new blocks
-- **Transaction Confirmed**: Monitor specific transactions
-- **VET Transfer**: Watch VET movements
-- **VTHO Transfer**: Watch VTHO movements
-- **VIP-180 Transfer**: Monitor token transfers
-- **VIP-181 Transfer**: Monitor NFT transfers
-- **Contract Event**: Watch for smart contract events
+| Operation | Description |
+|-----------|-------------|
+| Get Logs | Query blockchain logs with filtering options |
+| Subscribe to Events | Monitor real-time blockchain events |
+| Get Event History | Retrieve historical events for analysis |
+| Filter Events | Apply complex filters to event queries |
+| Parse Event Data | Decode event data using ABI specifications |
 
 ## Usage Examples
 
-### Send VET
-
 ```javascript
-// Configuration
-{
-  "resource": "vet",
-  "operation": "transfer",
-  "toAddress": "0x...",
-  "amount": "100"
-}
+// Get latest block information
+const latestBlock = {
+  "resource": "blocks",
+  "operation": "getLatestBlock",
+  "parameters": {}
+};
+
+// Send VET transaction
+const sendTransaction = {
+  "resource": "transactions",
+  "operation": "sendTransaction",
+  "parameters": {
+    "to": "0x7567d83b7b8d80addcb281a71d54fc7b3364ffed",
+    "amount": "1000000000000000000", // 1 VET in wei
+    "data": "0x"
+  }
+};
+
+// Check token balance
+const tokenBalance = {
+  "resource": "tokens",
+  "operation": "getTokenBalance",
+  "parameters": {
+    "tokenAddress": "0x0000000000000000000000000000456E65726779",
+    "accountAddress": "0x7567d83b7b8d80addcb281a71d54fc7b3364ffed"
+  }
+};
+
+// Query contract events
+const contractEvents = {
+  "resource": "events",
+  "operation": "getLogs",
+  "parameters": {
+    "address": "0x0000000000000000000000000000456E65726779",
+    "fromBlock": "0x1000000",
+    "toBlock": "latest",
+    "topics": ["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"]
+  }
+};
 ```
-
-### Get Token Balance
-
-```javascript
-// Configuration
-{
-  "resource": "vip180",
-  "operation": "getBalance",
-  "contractAddress": "0x0000000000000000000000000000456E65726779",
-  "ownerAddress": "0x..."
-}
-```
-
-### Multi-Clause Transaction
-
-```javascript
-// Send VET to multiple recipients in one transaction
-{
-  "resource": "vet",
-  "operation": "multiTransfer",
-  "recipients": [
-    { "address": "0x...", "amount": "10" },
-    { "address": "0x...", "amount": "20" },
-    { "address": "0x...", "amount": "30" }
-  ]
-}
-```
-
-### Read Smart Contract
-
-```javascript
-// Call a contract function
-{
-  "resource": "contract",
-  "operation": "read",
-  "contractAddress": "0x...",
-  "abi": "[...]",
-  "functionName": "balanceOf",
-  "parameters": "[\"0x...\"]"
-}
-```
-
-### Calculate VTHO Generation
-
-```javascript
-// Calculate VTHO generated by VET holdings
-{
-  "resource": "account",
-  "operation": "calculateVthoGeneration",
-  "vetAmount": "1000000",
-  "timePeriod": "month"
-}
-```
-
-## VeChain Concepts
-
-### Dual Token Model
-
-VeChain uses two tokens:
-- **VET (VeChain Token)**: The value token for transfers and staking
-- **VTHO (VeThor Token)**: The energy token used for gas fees
-
-VET generates VTHO over time at a rate of **0.000432 VTHO per VET per day** (5×10⁻⁹ per second).
-
-### Multi-Clause Transactions
-
-Unlike Ethereum, VeChain supports multiple operations in a single transaction:
-- Send to multiple recipients
-- Interact with multiple contracts
-- Mix different operation types
-- Atomic execution (all or nothing)
-
-### Fee Delegation (VIP-191)
-
-Third parties can pay gas fees on behalf of users:
-- Improves user experience
-- Enables gas-free applications
-- Supports enterprise use cases
-
-### Block Finality
-
-VeChain PoA 2.0 provides:
-- ~10 second block time
-- ~12 blocks to finality (~120 seconds)
-- Two-phase commit confirmation
-- 101 authority masternodes
-
-## Networks
-
-| Network | Chain Tag | Node URL |
-|---------|-----------|----------|
-| Mainnet | 0x4a (74) | https://mainnet.veblocks.net |
-| Testnet | 0x27 (39) | https://testnet.veblocks.net |
-| Thor Solo | 0xf6 (246) | http://localhost:8669 |
 
 ## Error Handling
 
-### Common Errors
-
-**"Invalid private key"**
-- Ensure your private key is in hex format
-- Remove the `0x` prefix if present
-- Key should be 64 characters (32 bytes)
-
-**"Insufficient VTHO"**
-- Check your VTHO balance
-- VTHO is required for gas fees
-- VET generates VTHO over time
-
-**"Transaction reverted"**
-- Check contract requirements
-- Verify you have sufficient balances
-- Use simulate before sending
-
-**"Network timeout"**
-- Check node URL is correct
-- Try a different node
-- Check network connectivity
-
-## Security Best Practices
-
-1. **Never share private keys** - Store them securely
-2. **Use testnet for development** - Test thoroughly before mainnet
-3. **Validate addresses** - Always validate before sending
-4. **Simulate transactions** - Use simulate before sending value
-5. **Check balances** - Ensure sufficient VET and VTHO
+| Error | Description | Solution |
+|-------|-------------|----------|
+| Invalid API Key | Authentication failed with provided credentials | Verify API key is correct and has required permissions |
+| Insufficient Balance | Account lacks sufficient VET or VTHO for transaction | Check account balance and ensure adequate funds |
+| Gas Limit Exceeded | Transaction requires more gas than specified limit | Increase gas limit or optimize contract interaction |
+| Network Timeout | Request to VeChain node timed out | Check network connectivity and node availability |
+| Invalid Address Format | Provided address doesn't match VeChain format | Ensure address is valid 42-character hex string |
+| Contract Execution Failed | Smart contract call reverted or failed | Review contract method parameters and state requirements |
 
 ## Development
 
 ```bash
-# Install dependencies
 npm install
-
-# Build the project
 npm run build
-
-# Run in watch mode
-npm run dev
-
-# Run tests
 npm test
-
-# Run tests with coverage
-npm run test:coverage
-
-# Lint code
 npm run lint
-
-# Fix lint issues
-npm run lint:fix
+npm run dev
 ```
 
 ## Author
@@ -399,44 +210,22 @@ Permitted for personal, educational, research, and internal business use.
 ### Commercial Use
 Use of this node within any SaaS, PaaS, hosted platform, managed service, or paid automation offering requires a commercial license.
 
-For licensing inquiries:
-**licensing@velobpa.com**
+For licensing inquiries: **licensing@velobpa.com**
 
 See [LICENSE](LICENSE), [COMMERCIAL_LICENSE.md](COMMERCIAL_LICENSE.md), and [LICENSING_FAQ.md](LICENSING_FAQ.md) for details.
 
 ## Contributing
 
-Contributions are welcome! Please:
+Contributions are welcome! Please ensure:
 
-1. Fork the repository
-2. Create a feature branch
-3. Make your changes
-4. Add tests if applicable
-5. Submit a pull request
+1. Code follows existing style conventions
+2. All tests pass (`npm test`)
+3. Linting passes (`npm run lint`)
+4. Documentation is updated for new features
+5. Commit messages are descriptive
 
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/Velocity-BPA/n8n-nodes-vechain/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/Velocity-BPA/n8n-nodes-vechain/discussions)
-
-## Acknowledgments
-
-- [VeChain Foundation](https://www.vechain.org/) - For the VeChain blockchain
-- [n8n](https://n8n.io/) - For the workflow automation platform
-- [thor-devkit](https://github.com/vechain/thor-devkit.js) - VeChain SDK
-
----
-
-## Changelog
-
-### v1.0.0
-- Initial release
-- Full VeChain blockchain support
-- VET/VTHO operations
-- VIP-180 token support
-- VIP-181 NFT support
-- Smart contract interactions
-- Multi-clause transactions
-- Fee delegation support
-- Block and event monitoring
-- Utility functions
+- **VeChain Documentation**: [VeChain Thor Documentation](https://docs.vechain.org/)
+- **VeChain Community**: [VeChain Official Discord](https://discord.gg/vechain)
