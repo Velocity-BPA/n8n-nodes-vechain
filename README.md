@@ -8,25 +8,25 @@
 >
 > For licensing information, visit https://velobpa.com/licensing or contact licensing@velobpa.com.
 
-An n8n community node that provides seamless integration with the VeChain blockchain network. This node includes 6 comprehensive resources (Blocks, Transactions, Accounts, Tokens, Contracts, Events) enabling developers to build powerful blockchain automation workflows for supply chain, IoT, and enterprise applications on VeChain's dual-token ecosystem.
+An n8n community node for integrating with VeChain blockchain networks. This node provides 6 comprehensive resources for interacting with VeChain's enterprise-grade blockchain platform, enabling account management, block exploration, transaction processing, event log monitoring, node information retrieval, and smart contract interactions.
 
 ![n8n Community Node](https://img.shields.io/badge/n8n-Community%20Node-blue)
 ![License](https://img.shields.io/badge/license-BSL--1.1-blue)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)
-![VeChain](https://img.shields.io/badge/VeChain-Thor-00d4ff)
-![Blockchain](https://img.shields.io/badge/Blockchain-Enterprise-green)
-![Supply Chain](https://img.shields.io/badge/Supply%20Chain-Ready-orange)
+![VeChain](https://img.shields.io/badge/VeChain-Blockchain-00d4aa)
+![VET](https://img.shields.io/badge/VET-VTHO-15bdff)
+![Web3](https://img.shields.io/badge/Web3-Enterprise-purple)
 
 ## Features
 
-- **Block Operations** - Query block data, retrieve block details, and monitor blockchain height
-- **Transaction Management** - Send transactions, check transaction status, and retrieve transaction history
-- **Account Operations** - Get account balances, manage VET/VTHO tokens, and monitor account activity
-- **Token Integration** - Interact with VIP-180 tokens, check balances, and perform token transfers
-- **Smart Contract Interaction** - Deploy contracts, call contract methods, and monitor contract events
-- **Event Monitoring** - Subscribe to blockchain events, filter logs, and track contract emissions
-- **Dual-Token Support** - Full support for VET and VTHO token operations
-- **Enterprise Ready** - Built for supply chain and IoT use cases with robust error handling
+- **Account Management** - Query account balances, energy (VTHO), and transaction history
+- **Block Explorer** - Retrieve block details, headers, and validate blockchain data
+- **Transaction Processing** - Send transactions, check status, and decode transaction data
+- **Event Log Monitoring** - Filter and retrieve smart contract event logs and emissions
+- **Node Information** - Access network status, peer information, and blockchain metrics
+- **Smart Contract Interaction** - Call contract methods, deploy contracts, and manage contract state
+- **Multi-Network Support** - Connect to MainNet, TestNet, and custom VeChain networks
+- **Enterprise Features** - Built for production environments with comprehensive error handling
 
 ## Installation
 
@@ -61,128 +61,128 @@ n8n start
 
 | Field | Description | Required |
 |-------|-------------|----------|
-| API Key | VeChain Thor node API key for authenticated requests | Yes |
-| Network | Network selection (MainNet/TestNet) | Yes |
-| Node URL | Custom VeChain Thor node URL (optional) | No |
-| Private Key | Wallet private key for transaction signing | No* |
-
-*Required only for operations that send transactions
+| API Key | VeChain node API key for authentication | Yes |
+| Network URL | VeChain network endpoint (MainNet/TestNet/Custom) | Yes |
+| Network Type | Select MainNet, TestNet, or Custom network | Yes |
 
 ## Resources & Operations
 
-### 1. Blocks
+### 1. Account
 
 | Operation | Description |
 |-----------|-------------|
-| Get Block | Retrieve block information by number or hash |
-| Get Latest Block | Get the most recent block on the blockchain |
+| Get Account | Retrieve account information including VET and VTHO balances |
+| Get Account Code | Get bytecode for smart contract accounts |
+| Get Account Storage | Retrieve storage data from account at specific key |
+| List Transactions | Get transaction history for an account |
+| Get Energy | Retrieve VTHO (energy) balance and calculations |
+
+### 2. Block
+
+| Operation | Description |
+|-----------|-------------|
+| Get Block | Retrieve complete block information by ID or number |
+| Get Block Header | Get block header data without transactions |
+| Get Latest Block | Retrieve the most recent block |
 | Get Block Range | Fetch multiple blocks within a specified range |
-| Get Block Transactions | List all transactions in a specific block |
+| Validate Block | Verify block integrity and signatures |
 
-### 2. Transactions
+### 3. Transaction
 
 | Operation | Description |
 |-----------|-------------|
-| Send Transaction | Broadcast a new transaction to the network |
-| Get Transaction | Retrieve transaction details by hash |
+| Get Transaction | Retrieve transaction details by ID |
 | Get Transaction Receipt | Get transaction execution receipt and logs |
-| Get Account Transactions | List transactions for a specific account |
-| Estimate Gas | Calculate gas requirements for a transaction |
+| Send Transaction | Broadcast a signed transaction to the network |
+| Estimate Gas | Calculate gas requirements for transaction execution |
+| Decode Transaction | Parse and decode transaction input data |
+| Get Transaction Status | Check current status of pending transactions |
 
-### 3. Accounts
-
-| Operation | Description |
-|-----------|-------------|
-| Get Balance | Retrieve VET balance for an account |
-| Get Energy Balance | Get VTHO (energy) balance for an account |
-| Get Account Details | Fetch comprehensive account information |
-| Get Code | Retrieve smart contract code for contract accounts |
-| Get Storage | Query contract storage values |
-
-### 4. Tokens
+### 4. Log
 
 | Operation | Description |
 |-----------|-------------|
-| Get Token Balance | Check VIP-180 token balance for an account |
-| Transfer Tokens | Send VIP-180 tokens between accounts |
-| Get Token Info | Retrieve token metadata and specifications |
-| Get Token Holders | List accounts holding a specific token |
-| Get Token Transfers | Query token transfer history |
+| Get Logs | Retrieve event logs with filtering options |
+| Filter Event Logs | Search logs by contract address, topics, and block range |
+| Get Transfer Logs | Retrieve VET and token transfer events |
+| Decode Event Log | Parse and decode smart contract event data |
+| Monitor Logs | Real-time log monitoring with webhook support |
 
-### 5. Contracts
-
-| Operation | Description |
-|-----------|-------------|
-| Deploy Contract | Deploy a new smart contract to the blockchain |
-| Call Method | Execute a smart contract method |
-| Query Method | Read data from a smart contract (view functions) |
-| Get Events | Retrieve events emitted by a contract |
-| Get Contract Info | Fetch contract metadata and ABI |
-
-### 6. Events
+### 5. Node
 
 | Operation | Description |
 |-----------|-------------|
-| Get Logs | Query blockchain logs with filtering options |
-| Subscribe to Events | Monitor real-time blockchain events |
-| Get Event History | Retrieve historical events for analysis |
-| Filter Events | Apply complex filters to event queries |
-| Parse Event Data | Decode event data using ABI specifications |
+| Get Node Info | Retrieve node status and network information |
+| Get Peers | List connected peer nodes and network topology |
+| Get Chain Info | Get blockchain statistics and chain head information |
+| Check Sync Status | Verify node synchronization status |
+| Get Network Health | Retrieve network performance metrics |
+
+### 6. Contract
+
+| Operation | Description |
+|-----------|-------------|
+| Call Method | Execute read-only smart contract methods |
+| Send Method | Execute state-changing contract methods |
+| Deploy Contract | Deploy new smart contracts to the network |
+| Get Contract Info | Retrieve contract details and metadata |
+| Estimate Method Gas | Calculate gas costs for contract method execution |
+| Decode Method Data | Parse contract method input and output data |
 
 ## Usage Examples
 
 ```javascript
-// Get latest block information
-const latestBlock = {
-  "resource": "blocks",
+// Get account VET and VTHO balances
+{
+  "resource": "account",
+  "operation": "getAccount",
+  "address": "0x8384738c995d49c5b692560ae688fc8b51af1059",
+  "returnAll": true
+}
+```
+
+```javascript
+// Retrieve latest block information
+{
+  "resource": "block",
   "operation": "getLatestBlock",
-  "parameters": {}
-};
+  "expanded": true,
+  "includeTransactions": true
+}
+```
 
-// Send VET transaction
-const sendTransaction = {
-  "resource": "transactions",
-  "operation": "sendTransaction",
-  "parameters": {
-    "to": "0x7567d83b7b8d80addcb281a71d54fc7b3364ffed",
-    "amount": "1000000000000000000", // 1 VET in wei
-    "data": "0x"
-  }
-};
+```javascript
+// Monitor contract event logs
+{
+  "resource": "log",
+  "operation": "filterEventLogs",
+  "contractAddress": "0x0000000000000000000000000000456e65726779",
+  "fromBlock": "latest",
+  "limit": 100
+}
+```
 
-// Check token balance
-const tokenBalance = {
-  "resource": "tokens",
-  "operation": "getTokenBalance",
-  "parameters": {
-    "tokenAddress": "0x0000000000000000000000000000456E65726779",
-    "accountAddress": "0x7567d83b7b8d80addcb281a71d54fc7b3364ffed"
-  }
-};
-
-// Query contract events
-const contractEvents = {
-  "resource": "events",
-  "operation": "getLogs",
-  "parameters": {
-    "address": "0x0000000000000000000000000000456E65726779",
-    "fromBlock": "0x1000000",
-    "toBlock": "latest",
-    "topics": ["0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef"]
-  }
-};
+```javascript
+// Call smart contract method
+{
+  "resource": "contract",
+  "operation": "callMethod",
+  "contractAddress": "0x89827f7bb951fd8a56f8ef13c5bfeb82d0ca8db2",
+  "methodABI": "function name() returns (string)",
+  "parameters": []
+}
 ```
 
 ## Error Handling
 
 | Error | Description | Solution |
 |-------|-------------|----------|
-| Invalid API Key | Authentication failed with provided credentials | Verify API key is correct and has required permissions |
-| Insufficient Balance | Account lacks sufficient VET or VTHO for transaction | Check account balance and ensure adequate funds |
-| Gas Limit Exceeded | Transaction requires more gas than specified limit | Increase gas limit or optimize contract interaction |
-| Network Timeout | Request to VeChain node timed out | Check network connectivity and node availability |
-| Invalid Address Format | Provided address doesn't match VeChain format | Ensure address is valid 42-character hex string |
-| Contract Execution Failed | Smart contract call reverted or failed | Review contract method parameters and state requirements |
+| Invalid API Key | Authentication failed with provided credentials | Verify API key and network endpoint configuration |
+| Network Timeout | Request exceeded timeout limit | Check network connectivity and try again |
+| Insufficient Gas | Transaction gas limit too low | Increase gas limit or use gas estimation |
+| Invalid Address | Malformed or invalid VeChain address | Verify address format (0x + 40 hex characters) |
+| Block Not Found | Requested block doesn't exist | Check block number/hash and network sync status |
+| Contract Error | Smart contract execution failed | Review contract method parameters and state |
 
 ## Development
 
@@ -227,5 +227,5 @@ Contributions are welcome! Please ensure:
 ## Support
 
 - **Issues**: [GitHub Issues](https://github.com/Velocity-BPA/n8n-nodes-vechain/issues)
-- **VeChain Documentation**: [VeChain Thor Documentation](https://docs.vechain.org/)
-- **VeChain Community**: [VeChain Official Discord](https://discord.gg/vechain)
+- **VeChain Documentation**: [VeChain Developer Portal](https://docs.vechain.org/)
+- **VeChain Community**: [VeChain Official Forum](https://www.vechain.org/community/)
