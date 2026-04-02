@@ -49,6 +49,30 @@ export class VeChain implements INodeType {
         noDataExpression: true,
         options: [
           {
+            name: 'Account',
+            value: 'account',
+          },
+          {
+            name: 'Block',
+            value: 'block',
+          },
+          {
+            name: 'Transaction',
+            value: 'transaction',
+          },
+          {
+            name: 'Log',
+            value: 'log',
+          },
+          {
+            name: 'Node',
+            value: 'node',
+          },
+          {
+            name: 'Contract',
+            value: 'contract',
+          },
+          {
             name: 'Blocks',
             value: 'blocks',
           },
@@ -73,9 +97,146 @@ export class VeChain implements INodeType {
             value: 'events',
           }
         ],
-        default: 'blocks',
+        default: 'account',
       },
       // Operation dropdowns per resource
+{
+  displayName: 'Operation',
+  name: 'operation',
+  type: 'options',
+  noDataExpression: true,
+  displayOptions: { show: { resource: ['account'] } },
+  options: [
+    { 
+      name: 'Get Account', 
+      value: 'getAccount', 
+      description: 'Get account details including VET balance, VTHO balance and energy',
+      action: 'Get account details'
+    },
+    { 
+      name: 'Get Account Code', 
+      value: 'getAccountCode', 
+      description: 'Get account bytecode for contract accounts',
+      action: 'Get account bytecode'
+    },
+    { 
+      name: 'Get Account Storage', 
+      value: 'getAccountStorage', 
+      description: 'Get storage value at specific key for contract accounts',
+      action: 'Get account storage value'
+    }
+  ],
+  default: 'getAccount',
+},
+{
+  displayName: 'Operation',
+  name: 'operation',
+  type: 'options',
+  noDataExpression: true,
+  displayOptions: { show: { resource: ['block'] } },
+  options: [
+    { name: 'Get Best Block', value: 'getBestBlock', description: 'Get the latest block information', action: 'Get best block' },
+    { name: 'Get Block', value: 'getBlock', description: 'Get specific block by number or ID', action: 'Get block' },
+    { name: 'Get Block Receipts', value: 'getBlockReceipts', description: 'Get all transaction receipts in a block', action: 'Get block receipts' }
+  ],
+  default: 'getBestBlock',
+},
+{
+	displayName: 'Operation',
+	name: 'operation',
+	type: 'options',
+	noDataExpression: true,
+	displayOptions: {
+		show: {
+			resource: ['transaction'],
+		},
+	},
+	options: [
+		{
+			name: 'Get Transaction',
+			value: 'getTransaction',
+			description: 'Get transaction details by transaction ID',
+			action: 'Get transaction details',
+		},
+		{
+			name: 'Get Transaction Receipt',
+			value: 'getTransactionReceipt',
+			description: 'Get transaction receipt and execution results',
+			action: 'Get transaction receipt',
+		},
+		{
+			name: 'Send Transaction',
+			value: 'sendTransaction',
+			description: 'Submit a signed transaction to the network',
+			action: 'Send transaction',
+		},
+	],
+	default: 'getTransaction',
+},
+{
+	displayName: 'Operation',
+	name: 'operation',
+	type: 'options',
+	noDataExpression: true,
+	displayOptions: {
+		show: {
+			resource: ['log'],
+		},
+	},
+	options: [
+		{
+			name: 'Filter Event Logs',
+			value: 'filterEventLogs',
+			description: 'Filter and retrieve event logs with criteria',
+			action: 'Filter event logs',
+		},
+		{
+			name: 'Filter Transfer Logs',
+			value: 'filterTransferLogs',
+			description: 'Filter VET/VIP-180 token transfer logs',
+			action: 'Filter transfer logs',
+		},
+	],
+	default: 'filterEventLogs',
+},
+{
+  displayName: 'Operation',
+  name: 'operation',
+  type: 'options',
+  noDataExpression: true,
+  displayOptions: { show: { resource: ['node'] } },
+  options: [
+    { name: 'Get Network Peers', value: 'getNetworkPeers', description: 'Get connected peer information', action: 'Get network peers' },
+    { name: 'Get Peer Stats', value: 'getPeerStats', description: 'Get network peer statistics', action: 'Get peer stats' }
+  ],
+  default: 'getNetworkPeers',
+},
+{
+	displayName: 'Operation',
+	name: 'operation',
+	type: 'options',
+	noDataExpression: true,
+	displayOptions: {
+		show: {
+			resource: ['contract'],
+		},
+	},
+	options: [
+		{
+			name: 'Call Contract',
+			value: 'callContract',
+			description: 'Execute read-only contract function call',
+			action: 'Call contract function',
+		},
+		{
+			name: 'Batch Call Contract',
+			value: 'batchCallContract',
+			description: 'Execute multiple contract calls in batch',
+			action: 'Batch call contract functions',
+		},
+	],
+	default: 'callContract',
+},
 {
   displayName: 'Operation',
   name: 'operation',
@@ -299,6 +460,343 @@ export class VeChain implements INodeType {
   default: 'getEventLogs',
 },
       // Parameter definitions
+{
+  displayName: 'Address',
+  name: 'address',
+  type: 'string',
+  required: true,
+  default: '',
+  placeholder: '0x0000000000000000000000000000000000000000',
+  description: 'The VeChain account address to query',
+  displayOptions: {
+    show: {
+      resource: ['account'],
+      operation: ['getAccount', 'getAccountCode', 'getAccountStorage']
+    }
+  }
+},
+{
+  displayName: 'Storage Key',
+  name: 'storageKey',
+  type: 'string',
+  required: true,
+  default: '',
+  placeholder: '0x0000000000000000000000000000000000000000000000000000000000000000',
+  description: 'The storage key to query (32-byte hex string)',
+  displayOptions: {
+    show: {
+      resource: ['account'],
+      operation: ['getAccountStorage']
+    }
+  }
+},
+{
+  displayName: 'Revision',
+  name: 'revision',
+  type: 'string',
+  required: true,
+  displayOptions: { show: { resource: ['block'], operation: ['getBlock'] } },
+  default: '',
+  description: 'Block number or ID to retrieve',
+  placeholder: '12345 or 0x...'
+},
+{
+  displayName: 'Revision',
+  name: 'revision',
+  type: 'string',
+  required: true,
+  displayOptions: { show: { resource: ['block'], operation: ['getBlockReceipts'] } },
+  default: '',
+  description: 'Block number or ID to get receipts from',
+  placeholder: '12345 or 0x...'
+},
+{
+	displayName: 'Transaction ID',
+	name: 'transactionId',
+	type: 'string',
+	required: true,
+	displayOptions: {
+		show: {
+			resource: ['transaction'],
+			operation: ['getTransaction', 'getTransactionReceipt'],
+		},
+	},
+	default: '',
+	description: 'The transaction ID to retrieve information for',
+},
+{
+	displayName: 'Raw Transaction Data',
+	name: 'rawTransactionData',
+	type: 'string',
+	required: true,
+	displayOptions: {
+		show: {
+			resource: ['transaction'],
+			operation: ['sendTransaction'],
+		},
+	},
+	default: '',
+	description: 'The signed raw transaction data to submit to the network',
+},
+{
+	displayName: 'Additional Headers',
+	name: 'additionalHeaders',
+	type: 'fixedCollection',
+	typeOptions: {
+		multipleValues: true,
+	},
+	displayOptions: {
+		show: {
+			resource: ['transaction'],
+		},
+	},
+	default: {},
+	description: 'Additional headers to include in the request',
+	options: [
+		{
+			name: 'headers',
+			displayName: 'Header',
+			values: [
+				{
+					displayName: 'Name',
+					name: 'name',
+					type: 'string',
+					default: '',
+					description: 'Header name',
+				},
+				{
+					displayName: 'Value',
+					name: 'value',
+					type: 'string',
+					default: '',
+					description: 'Header value',
+				},
+			],
+		},
+	],
+},
+{
+	displayName: 'Contract Address',
+	name: 'address',
+	type: 'string',
+	required: true,
+	displayOptions: {
+		show: {
+			resource: ['log'],
+			operation: ['filterEventLogs'],
+		},
+	},
+	default: '',
+	description: 'The contract address to filter logs from',
+},
+{
+	displayName: 'Topics',
+	name: 'topics',
+	type: 'json',
+	displayOptions: {
+		show: {
+			resource: ['log'],
+			operation: ['filterEventLogs'],
+		},
+	},
+	default: '[]',
+	description: 'Array of topics to filter by (event signatures and indexed parameters)',
+},
+{
+	displayName: 'Range',
+	name: 'range',
+	type: 'fixedCollection',
+	displayOptions: {
+		show: {
+			resource: ['log'],
+			operation: ['filterEventLogs'],
+		},
+	},
+	default: {},
+	options: [
+		{
+			name: 'blockRange',
+			displayName: 'Block Range',
+			values: [
+				{
+					displayName: 'From Block',
+					name: 'fromBlock',
+					type: 'number',
+					default: 0,
+					description: 'Starting block number',
+				},
+				{
+					displayName: 'To Block',
+					name: 'toBlock',
+					type: 'number',
+					default: 0,
+					description: 'Ending block number (0 for latest)',
+				},
+			],
+		},
+	],
+},
+{
+	displayName: 'Contract Address',
+	name: 'address',
+	type: 'string',
+	required: true,
+	displayOptions: {
+		show: {
+			resource: ['log'],
+			operation: ['filterTransferLogs'],
+		},
+	},
+	default: '',
+	description: 'The token contract address to filter transfer logs from',
+},
+{
+	displayName: 'Sender Address',
+	name: 'sender',
+	type: 'string',
+	displayOptions: {
+		show: {
+			resource: ['log'],
+			operation: ['filterTransferLogs'],
+		},
+	},
+	default: '',
+	description: 'Filter transfers from this sender address',
+},
+{
+	displayName: 'Recipient Address',
+	name: 'recipient',
+	type: 'string',
+	displayOptions: {
+		show: {
+			resource: ['log'],
+			operation: ['filterTransferLogs'],
+		},
+	},
+	default: '',
+	description: 'Filter transfers to this recipient address',
+},
+{
+	displayName: 'Range',
+	name: 'range',
+	type: 'fixedCollection',
+	displayOptions: {
+		show: {
+			resource: ['log'],
+			operation: ['filterTransferLogs'],
+		},
+	},
+	default: {},
+	options: [
+		{
+			name: 'blockRange',
+			displayName: 'Block Range',
+			values: [
+				{
+					displayName: 'From Block',
+					name: 'fromBlock',
+					type: 'number',
+					default: 0,
+					description: 'Starting block number',
+				},
+				{
+					displayName: 'To Block',
+					name: 'toBlock',
+					type: 'number',
+					default: 0,
+					description: 'Ending block number (0 for latest)',
+				},
+			],
+		},
+	],
+},
+{
+	displayName: 'Contract Address',
+	name: 'address',
+	type: 'string',
+	required: true,
+	displayOptions: {
+		show: {
+			resource: ['contract'],
+			operation: ['callContract'],
+		},
+	},
+	default: '',
+	placeholder: '0x0000000000000000000000000000456e65726779',
+	description: 'The contract address to call',
+},
+{
+	displayName: 'Call Data',
+	name: 'calldata',
+	type: 'string',
+	required: true,
+	displayOptions: {
+		show: {
+			resource: ['contract'],
+			operation: ['callContract'],
+		},
+	},
+	default: '',
+	placeholder: '0x70a08231000000000000000000000000abc...',
+	description: 'The encoded function call data',
+},
+{
+	displayName: 'Caller Address',
+	name: 'caller',
+	type: 'string',
+	required: false,
+	displayOptions: {
+		show: {
+			resource: ['contract'],
+			operation: ['callContract'],
+		},
+	},
+	default: '',
+	placeholder: '0x7567d83b7b8d80addcb281a71d54fc7b3364ffed',
+	description: 'The address from which the call is made (optional)',
+},
+{
+	displayName: 'Clauses',
+	name: 'clauses',
+	type: 'collection',
+	typeOptions: {
+		multipleValues: true,
+	},
+	required: true,
+	displayOptions: {
+		show: {
+			resource: ['contract'],
+			operation: ['batchCallContract'],
+		},
+	},
+	default: {},
+	options: [
+		{
+			displayName: 'Address',
+			name: 'to',
+			type: 'string',
+			default: '',
+			placeholder: '0x0000000000000000000000000000456e65726779',
+			description: 'The contract address to call',
+		},
+		{
+			displayName: 'Value',
+			name: 'value',
+			type: 'string',
+			default: '0x0',
+			description: 'Amount of VET to transfer (in hex)',
+		},
+		{
+			displayName: 'Data',
+			name: 'data',
+			type: 'string',
+			default: '',
+			placeholder: '0x70a08231000000000000000000000000abc...',
+			description: 'The encoded function call data',
+		},
+	],
+	description: 'Array of contract calls to execute in batch',
+},
 {
   displayName: 'Revision',
   name: 'revision',
@@ -866,6 +1364,18 @@ export class VeChain implements INodeType {
     const resource = this.getNodeParameter('resource', 0) as string;
 
     switch (resource) {
+      case 'account':
+        return [await executeAccountOperations.call(this, items)];
+      case 'block':
+        return [await executeBlockOperations.call(this, items)];
+      case 'transaction':
+        return [await executeTransactionOperations.call(this, items)];
+      case 'log':
+        return [await executeLogOperations.call(this, items)];
+      case 'node':
+        return [await executeNodeOperations.call(this, items)];
+      case 'contract':
+        return [await executeContractOperations.call(this, items)];
       case 'blocks':
         return [await executeBlocksOperations.call(this, items)];
       case 'transactions':
@@ -887,6 +1397,535 @@ export class VeChain implements INodeType {
 // ============================================================
 // Resource Handler Functions
 // ============================================================
+
+async function executeAccountOperations(
+  this: IExecuteFunctions,
+  items: INodeExecutionData[],
+): Promise<INodeExecutionData[]> {
+  const returnData: INodeExecutionData[] = [];
+  const operation = this.getNodeParameter('operation', 0) as string;
+  const credentials = await this.getCredentials('vechainApi') as any;
+
+  for (let i = 0; i < items.length; i++) {
+    try {
+      let result: any;
+      const address = this.getNodeParameter('address', i) as string;
+
+      switch (operation) {
+        case 'getAccount': {
+          const options: any = {
+            method: 'GET',
+            url: `${credentials.baseUrl}/accounts/${address}`,
+            headers: {
+              'X-Thor-Key': credentials.apiKey,
+              'Content-Type': 'application/json'
+            },
+            json: true
+          };
+          result = await this.helpers.httpRequest(options) as any;
+          break;
+        }
+        case 'getAccountCode': {
+          const options: any = {
+            method: 'GET',
+            url: `${credentials.baseUrl}/accounts/${address}/code`,
+            headers: {
+              'X-Thor-Key': credentials.apiKey,
+              'Content-Type': 'application/json'
+            },
+            json: true
+          };
+          result = await this.helpers.httpRequest(options) as any;
+          break;
+        }
+        case 'getAccountStorage': {
+          const storageKey = this.getNodeParameter('storageKey', i) as string;
+          const options: any = {
+            method: 'GET',
+            url: `${credentials.baseUrl}/accounts/${address}/storage/${storageKey}`,
+            headers: {
+              'X-Thor-Key': credentials.apiKey,
+              'Content-Type': 'application/json'
+            },
+            json: true
+          };
+          result = await this.helpers.httpRequest(options) as any;
+          break;
+        }
+        default:
+          throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
+      }
+
+      returnData.push({
+        json: result,
+        pairedItem: { item: i }
+      });
+
+    } catch (error: any) {
+      if (this.continueOnFail()) {
+        returnData.push({
+          json: { error: error.message },
+          pairedItem: { item: i }
+        });
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  return returnData;
+}
+
+async function executeBlockOperations(
+  this: IExecuteFunctions,
+  items: INodeExecutionData[],
+): Promise<INodeExecutionData[]> {
+  const returnData: INodeExecutionData[] = [];
+  const operation = this.getNodeParameter('operation', 0) as string;
+  const credentials = await this.getCredentials('vechainApi') as any;
+  
+  for (let i = 0; i < items.length; i++) {
+    try {
+      let result: any;
+      
+      switch (operation) {
+        case 'getBestBlock': {
+          const options: any = {
+            method: 'GET',
+            url: `${credentials.baseUrl}/blocks/best`,
+            headers: {
+              'X-Thor-API-Key': credentials.apiKey,
+              'Content-Type': 'application/json'
+            },
+            json: true
+          };
+          result = await this.helpers.httpRequest(options) as any;
+          break;
+        }
+        
+        case 'getBlock': {
+          const revision = this.getNodeParameter('revision', i) as string;
+          const options: any = {
+            method: 'GET',
+            url: `${credentials.baseUrl}/blocks/${revision}`,
+            headers: {
+              'X-Thor-API-Key': credentials.apiKey,
+              'Content-Type': 'application/json'
+            },
+            json: true
+          };
+          result = await this.helpers.httpRequest(options) as any;
+          break;
+        }
+        
+        case 'getBlockReceipts': {
+          const revision = this.getNodeParameter('revision', i) as string;
+          const options: any = {
+            method: 'GET',
+            url: `${credentials.baseUrl}/blocks/${revision}/receipts`,
+            headers: {
+              'X-Thor-API-Key': credentials.apiKey,
+              'Content-Type': 'application/json'
+            },
+            json: true
+          };
+          result = await this.helpers.httpRequest(options) as any;
+          break;
+        }
+        
+        default:
+          throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
+      }
+      
+      returnData.push({ json: result, pairedItem: { item: i } });
+    } catch (error: any) {
+      if (this.continueOnFail()) {
+        returnData.push({ json: { error: error.message }, pairedItem: { item: i } });
+      } else {
+        throw error;
+      }
+    }
+  }
+  
+  return returnData;
+}
+
+async function executeTransactionOperations(
+	this: IExecuteFunctions,
+	items: INodeExecutionData[],
+): Promise<INodeExecutionData[]> {
+	const returnData: INodeExecutionData[] = [];
+	const operation = this.getNodeParameter('operation', 0) as string;
+	const credentials = await this.getCredentials('vechainApi') as any;
+
+	for (let i = 0; i < items.length; i++) {
+		try {
+			let result: any;
+
+			// Build base headers
+			const headers: any = {
+				'Content-Type': 'application/json',
+			};
+
+			// Add API key if provided
+			if (credentials.apiKey) {
+				headers['x-api-key'] = credentials.apiKey;
+			}
+
+			// Add additional headers if specified
+			const additionalHeaders = this.getNodeParameter('additionalHeaders', i, {}) as any;
+			if (additionalHeaders.headers) {
+				for (const header of additionalHeaders.headers) {
+					headers[header.name] = header.value;
+				}
+			}
+
+			switch (operation) {
+				case 'getTransaction': {
+					const transactionId = this.getNodeParameter('transactionId', i) as string;
+					
+					const options: any = {
+						method: 'GET',
+						url: `${credentials.baseUrl}/transactions/${transactionId}`,
+						headers: headers,
+						json: true,
+					};
+
+					result = await this.helpers.httpRequest(options) as any;
+					break;
+				}
+
+				case 'getTransactionReceipt': {
+					const transactionId = this.getNodeParameter('transactionId', i) as string;
+					
+					const options: any = {
+						method: 'GET',
+						url: `${credentials.baseUrl}/transactions/${transactionId}/receipt`,
+						headers: headers,
+						json: true,
+					};
+
+					result = await this.helpers.httpRequest(options) as any;
+					break;
+				}
+
+				case 'sendTransaction': {
+					const rawTransactionData = this.getNodeParameter('rawTransactionData', i) as string;
+					
+					const options: any = {
+						method: 'POST',
+						url: `${credentials.baseUrl}/transactions`,
+						headers: headers,
+						body: {
+							raw: rawTransactionData,
+						},
+						json: true,
+					};
+
+					result = await this.helpers.httpRequest(options) as any;
+					break;
+				}
+
+				default:
+					throw new NodeOperationError(
+						this.getNode(),
+						`Unknown operation: ${operation}`,
+						{ itemIndex: i },
+					);
+			}
+
+			returnData.push({
+				json: result,
+				pairedItem: { item: i },
+			});
+
+		} catch (error: any) {
+			if (this.continueOnFail()) {
+				returnData.push({
+					json: { error: error.message },
+					pairedItem: { item: i },
+				});
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	return returnData;
+}
+
+async function executeLogOperations(
+	this: IExecuteFunctions,
+	items: INodeExecutionData[],
+): Promise<INodeExecutionData[]> {
+	const returnData: INodeExecutionData[] = [];
+	const operation = this.getNodeParameter('operation', 0) as string;
+	const credentials = await this.getCredentials('vechainApi') as any;
+
+	for (let i = 0; i < items.length; i++) {
+		try {
+			let result: any;
+
+			switch (operation) {
+				case 'filterEventLogs': {
+					const address = this.getNodeParameter('address', i) as string;
+					const topics = this.getNodeParameter('topics', i) as string;
+					const range = this.getNodeParameter('range', i) as any;
+
+					const requestBody: any = {
+						address: address,
+					};
+
+					if (topics) {
+						try {
+							requestBody.topics = JSON.parse(topics);
+						} catch (error: any) {
+							throw new NodeOperationError(this.getNode(), 'Invalid JSON in topics parameter');
+						}
+					}
+
+					if (range && range.blockRange) {
+						requestBody.range = {
+							unit: 'block',
+							from: range.blockRange.fromBlock || 0,
+							to: range.blockRange.toBlock || 0,
+						};
+					}
+
+					const options: any = {
+						method: 'POST',
+						url: `${credentials.baseUrl}/logs/event`,
+						headers: {
+							'x-thor-key': credentials.apiKey,
+							'Content-Type': 'application/json',
+						},
+						body: requestBody,
+						json: true,
+					};
+
+					result = await this.helpers.httpRequest(options) as any;
+					break;
+				}
+
+				case 'filterTransferLogs': {
+					const address = this.getNodeParameter('address', i) as string;
+					const sender = this.getNodeParameter('sender', i) as string;
+					const recipient = this.getNodeParameter('recipient', i) as string;
+					const range = this.getNodeParameter('range', i) as any;
+
+					const requestBody: any = {
+						address: address,
+					};
+
+					if (sender) {
+						requestBody.sender = sender;
+					}
+
+					if (recipient) {
+						requestBody.recipient = recipient;
+					}
+
+					if (range && range.blockRange) {
+						requestBody.range = {
+							unit: 'block',
+							from: range.blockRange.fromBlock || 0,
+							to: range.blockRange.toBlock || 0,
+						};
+					}
+
+					const options: any = {
+						method: 'POST',
+						url: `${credentials.baseUrl}/logs/transfer`,
+						headers: {
+							'x-thor-key': credentials.apiKey,
+							'Content-Type': 'application/json',
+						},
+						body: requestBody,
+						json: true,
+					};
+
+					result = await this.helpers.httpRequest(options) as any;
+					break;
+				}
+
+				default:
+					throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
+			}
+
+			returnData.push({
+				json: result,
+				pairedItem: { item: i },
+			});
+
+		} catch (error: any) {
+			if (this.continueOnFail()) {
+				returnData.push({
+					json: { error: error.message },
+					pairedItem: { item: i },
+				});
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	return returnData;
+}
+
+async function executeNodeOperations(
+  this: IExecuteFunctions,
+  items: INodeExecutionData[],
+): Promise<INodeExecutionData[]> {
+  const returnData: INodeExecutionData[] = [];
+  const operation = this.getNodeParameter('operation', 0) as string;
+  const credentials = await this.getCredentials('vechainApi') as any;
+
+  for (let i = 0; i < items.length; i++) {
+    try {
+      let result: any;
+
+      switch (operation) {
+        case 'getNetworkPeers': {
+          const options: any = {
+            method: 'GET',
+            url: `${credentials.baseUrl}/node/network/peers`,
+            headers: {
+              'X-Thor-Api-Key': credentials.apiKey,
+              'Content-Type': 'application/json'
+            },
+            json: true
+          };
+          result = await this.helpers.httpRequest(options) as any;
+          break;
+        }
+
+        case 'getPeerStats': {
+          const options: any = {
+            method: 'GET',
+            url: `${credentials.baseUrl}/node/network/peers/stats`,
+            headers: {
+              'X-Thor-Api-Key': credentials.apiKey,
+              'Content-Type': 'application/json'
+            },
+            json: true
+          };
+          result = await this.helpers.httpRequest(options) as any;
+          break;
+        }
+
+        default:
+          throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
+      }
+
+      returnData.push({
+        json: result,
+        pairedItem: { item: i }
+      });
+
+    } catch (error: any) {
+      if (this.continueOnFail()) {
+        returnData.push({
+          json: { error: error.message },
+          pairedItem: { item: i }
+        });
+      } else {
+        throw error;
+      }
+    }
+  }
+
+  return returnData;
+}
+
+async function executeContractOperations(
+	this: IExecuteFunctions,
+	items: INodeExecutionData[],
+): Promise<INodeExecutionData[]> {
+	const returnData: INodeExecutionData[] = [];
+	const operation = this.getNodeParameter('operation', 0) as string;
+	const credentials = await this.getCredentials('vechainApi') as any;
+
+	for (let i = 0; i < items.length; i++) {
+		try {
+			let result: any;
+
+			switch (operation) {
+				case 'callContract': {
+					const address = this.getNodeParameter('address', i) as string;
+					const calldata = this.getNodeParameter('calldata', i) as string;
+					const caller = this.getNodeParameter('caller', i) as string;
+
+					const body: any = {
+						data: calldata,
+					};
+
+					if (caller) {
+						body.caller = caller;
+					}
+
+					const options: any = {
+						method: 'POST',
+						url: `${credentials.baseUrl}/accounts/${address}`,
+						headers: {
+							'Content-Type': 'application/json',
+							'x-thor-api-key': credentials.apiKey,
+						},
+						body,
+						json: true,
+					};
+
+					result = await this.helpers.httpRequest(options) as any;
+					break;
+				}
+
+				case 'batchCallContract': {
+					const clauses = this.getNodeParameter('clauses', i) as any[];
+
+					const formattedClauses = clauses.map((clause: any) => ({
+						to: clause.to || null,
+						value: clause.value || '0x0',
+						data: clause.data || '0x',
+					}));
+
+					const options: any = {
+						method: 'POST',
+						url: `${credentials.baseUrl}/accounts/batch`,
+						headers: {
+							'Content-Type': 'application/json',
+							'x-thor-api-key': credentials.apiKey,
+						},
+						body: {
+							clauses: formattedClauses,
+						},
+						json: true,
+					};
+
+					result = await this.helpers.httpRequest(options) as any;
+					break;
+				}
+
+				default:
+					throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
+			}
+
+			returnData.push({
+				json: result,
+				pairedItem: { item: i },
+			});
+		} catch (error: any) {
+			if (this.continueOnFail()) {
+				returnData.push({
+					json: { error: error.message },
+					pairedItem: { item: i },
+				});
+			} else {
+				throw error;
+			}
+		}
+	}
+
+	return returnData;
+}
 
 async function executeBlocksOperations(
   this: IExecuteFunctions,
@@ -1107,612 +2146,4 @@ async function executeTransactionsOperations(
           );
       }
       
-      returnData.push({ json: result, pairedItem: { item: i } });
-      
-    } catch (error: any) {
-      if (this.continueOnFail()) {
-        returnData.push({
-          json: { error: error.message },
-          pairedItem: { item: i },
-        });
-      } else {
-        if (error.httpCode) {
-          throw new NodeApiError(this.getNode(), error);
-        }
-        throw new NodeOperationError(this.getNode(), error.message);
-      }
-    }
-  }
-  
-  return returnData;
-}
-
-async function executeAccountsOperations(
-  this: IExecuteFunctions,
-  items: INodeExecutionData[],
-): Promise<INodeExecutionData[]> {
-  const returnData: INodeExecutionData[] = [];
-  const operation = this.getNodeParameter('operation', 0) as string;
-  const credentials = await this.getCredentials('vechainApi') as any;
-
-  for (let i = 0; i < items.length; i++) {
-    try {
-      let result: any;
-
-      switch (operation) {
-        case 'getAccount': {
-          const address = this.getNodeParameter('address', i) as string;
-          const revision = this.getNodeParameter('revision', i) as string;
-
-          const options: any = {
-            method: 'GET',
-            url: `${credentials.baseUrl}/accounts/${address}`,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearer_token}`,
-              'Content-Type': 'application/json',
-            },
-            qs: revision && revision !== 'best' ? { revision } : {},
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'getAccountCode': {
-          const address = this.getNodeParameter('address', i) as string;
-          const revision = this.getNodeParameter('revision', i) as string;
-
-          const options: any = {
-            method: 'GET',
-            url: `${credentials.baseUrl}/accounts/${address}/code`,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearer_token}`,
-              'Content-Type': 'application/json',
-            },
-            qs: revision && revision !== 'best' ? { revision } : {},
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'getAccountStorage': {
-          const address = this.getNodeParameter('address', i) as string;
-          const storageKey = this.getNodeParameter('storageKey', i) as string;
-          const revision = this.getNodeParameter('revision', i) as string;
-
-          const options: any = {
-            method: 'GET',
-            url: `${credentials.baseUrl}/accounts/${address}/storage/${storageKey}`,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearer_token}`,
-              'Content-Type': 'application/json',
-            },
-            qs: revision && revision !== 'best' ? { revision } : {},
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'getBatchAccounts': {
-          const addressesString = this.getNodeParameter('addresses', i) as string;
-          const revision = this.getNodeParameter('revision', i) as string;
-          
-          const addresses = addressesString.split(',').map((addr: string) => addr.trim());
-          
-          const requestBody: any = {
-            addresses: addresses,
-          };
-
-          if (revision && revision !== 'best') {
-            requestBody.revision = revision;
-          }
-
-          const options: any = {
-            method: 'POST',
-            url: `${credentials.baseUrl}/accounts/batch`,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearer_token}`,
-              'Content-Type': 'application/json',
-            },
-            body: requestBody,
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        default:
-          throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
-      }
-
-      returnData.push({
-        json: result,
-        pairedItem: { item: i },
-      });
-
-    } catch (error: any) {
-      if (this.continueOnFail()) {
-        returnData.push({
-          json: { error: error.message },
-          pairedItem: { item: i },
-        });
-      } else {
-        if (error.httpCode) {
-          throw new NodeApiError(this.getNode(), error);
-        }
-        throw new NodeOperationError(this.getNode(), error.message);
-      }
-    }
-  }
-
-  return returnData;
-}
-
-async function executeTokensOperations(
-  this: IExecuteFunctions,
-  items: INodeExecutionData[],
-): Promise<INodeExecutionData[]> {
-  const returnData: INodeExecutionData[] = [];
-  const operation = this.getNodeParameter('operation', 0) as string;
-  const credentials = await this.getCredentials('vechainApi') as any;
-
-  for (let i = 0; i < items.length; i++) {
-    try {
-      let result: any;
-
-      switch (operation) {
-        case 'getTokenBalance': {
-          const address = this.getNodeParameter('address', i) as string;
-          const tokenAddress = this.getNodeParameter('tokenAddress', i) as string;
-          const revision = this.getNodeParameter('revision', i) as string;
-
-          let url = `${credentials.baseUrl}/accounts/${address}/tokens/${tokenAddress}`;
-          if (revision) {
-            url += `?revision=${revision}`;
-          }
-
-          const options: any = {
-            method: 'GET',
-            url,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearerToken}`,
-              'Content-Type': 'application/json',
-            },
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'getBatchTokenBalances': {
-          const address = this.getNodeParameter('address', i) as string;
-          const tokenAddressesStr = this.getNodeParameter('tokenAddresses', i) as string;
-          const revision = this.getNodeParameter('revision', i) as string;
-
-          const tokenAddresses = tokenAddressesStr.split(',').map((addr: string) => addr.trim());
-
-          let url = `${credentials.baseUrl}/accounts/${address}/tokens/batch`;
-          if (revision) {
-            url += `?revision=${revision}`;
-          }
-
-          const options: any = {
-            method: 'POST',
-            url,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearerToken}`,
-              'Content-Type': 'application/json',
-            },
-            json: true,
-            body: {
-              tokenAddresses,
-            },
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'getTokenTransfers': {
-          const tokenAddress = this.getNodeParameter('tokenAddress', i) as string;
-          const offset = this.getNodeParameter('offset', i) as number;
-          const limit = this.getNodeParameter('limit', i) as number;
-
-          const params = new URLSearchParams();
-          if (offset !== undefined) params.append('offset', offset.toString());
-          if (limit !== undefined) params.append('limit', limit.toString());
-
-          const url = `${credentials.baseUrl}/tokens/${tokenAddress}/transfers${params.toString() ? '?' + params.toString() : ''}`;
-
-          const options: any = {
-            method: 'GET',
-            url,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearerToken}`,
-              'Content-Type': 'application/json',
-            },
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'getTokenHolders': {
-          const tokenAddress = this.getNodeParameter('tokenAddress', i) as string;
-          const offset = this.getNodeParameter('offset', i) as number;
-          const limit = this.getNodeParameter('limit', i) as number;
-
-          const params = new URLSearchParams();
-          if (offset !== undefined) params.append('offset', offset.toString());
-          if (limit !== undefined) params.append('limit', limit.toString());
-
-          const url = `${credentials.baseUrl}/tokens/${tokenAddress}/holders${params.toString() ? '?' + params.toString() : ''}`;
-
-          const options: any = {
-            method: 'GET',
-            url,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearerToken}`,
-              'Content-Type': 'application/json',
-            },
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        default:
-          throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
-      }
-
-      returnData.push({
-        json: result,
-        pairedItem: { item: i },
-      });
-
-    } catch (error: any) {
-      if (this.continueOnFail()) {
-        returnData.push({
-          json: { error: error.message },
-          pairedItem: { item: i },
-        });
-      } else {
-        if (error.httpCode) {
-          throw new NodeApiError(this.getNode(), error);
-        } else {
-          throw new NodeOperationError(this.getNode(), error.message);
-        }
-      }
-    }
-  }
-
-  return returnData;
-}
-
-async function executeContractsOperations(
-  this: IExecuteFunctions,
-  items: INodeExecutionData[],
-): Promise<INodeExecutionData[]> {
-  const returnData: INodeExecutionData[] = [];
-  const operation = this.getNodeParameter('operation', 0) as string;
-  const credentials = await this.getCredentials('vechainApi') as any;
-
-  for (let i = 0; i < items.length; i++) {
-    try {
-      let result: any;
-
-      switch (operation) {
-        case 'callContract': {
-          const address = this.getNodeParameter('address', i) as string;
-          const data = this.getNodeParameter('data', i) as string;
-          const caller = this.getNodeParameter('caller', i, '') as string;
-          const gas = this.getNodeParameter('gas', i, 21000) as number;
-          const gasPrice = this.getNodeParameter('gasPrice', i, '1000000000000000') as string;
-          const value = this.getNodeParameter('value', i, '0') as string;
-
-          const body: any = {
-            data,
-            gas,
-            gasPrice,
-            value,
-          };
-
-          if (caller) {
-            body.caller = caller;
-          }
-
-          const options: any = {
-            method: 'POST',
-            url: `${credentials.baseUrl}/accounts/${address}`,
-            headers: {
-              'Authorization': `Bearer ${credentials.apiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body,
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'batchCallContracts': {
-          const clauses = JSON.parse(this.getNodeParameter('clauses', i) as string);
-          const caller = this.getNodeParameter('caller', i, '') as string;
-          const gas = this.getNodeParameter('gas', i, 21000) as number;
-          const gasPrice = this.getNodeParameter('gasPrice', i, '1000000000000000') as string;
-
-          const body: any = {
-            clauses,
-            gas,
-            gasPrice,
-          };
-
-          if (caller) {
-            body.caller = caller;
-          }
-
-          const options: any = {
-            method: 'POST',
-            url: `${credentials.baseUrl}/accounts/batch`,
-            headers: {
-              'Authorization': `Bearer ${credentials.apiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body,
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'getContractEvents': {
-          const address = this.getNodeParameter('address', i) as string;
-          const offset = this.getNodeParameter('offset', i, 0) as number;
-          const limit = this.getNodeParameter('limit', i, 100) as number;
-          const topics = this.getNodeParameter('topics', i, '[]') as string;
-
-          const queryParams = new URLSearchParams({
-            offset: offset.toString(),
-            limit: limit.toString(),
-          });
-
-          if (topics !== '[]') {
-            const topicsArray = JSON.parse(topics);
-            topicsArray.forEach((topic: string, index: number) => {
-              queryParams.append(`topic${index}`, topic);
-            });
-          }
-
-          const options: any = {
-            method: 'GET',
-            url: `${credentials.baseUrl}/accounts/${address}/events?${queryParams.toString()}`,
-            headers: {
-              'Authorization': `Bearer ${credentials.apiKey}`,
-            },
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        case 'traceContractCall': {
-          const target = this.getNodeParameter('target', i) as string;
-          const clauses = JSON.parse(this.getNodeParameter('clauses', i) as string);
-          const tracer = this.getNodeParameter('tracer', i, 'call') as string;
-
-          const body: any = {
-            target,
-            clauses,
-            config: {
-              tracer,
-            },
-          };
-
-          const options: any = {
-            method: 'POST',
-            url: `${credentials.baseUrl}/debug/tracers`,
-            headers: {
-              'Authorization': `Bearer ${credentials.apiKey}`,
-              'Content-Type': 'application/json',
-            },
-            body,
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(options) as any;
-          break;
-        }
-
-        default:
-          throw new NodeOperationError(
-            this.getNode(),
-            `Unknown operation: ${operation}`,
-            { itemIndex: i }
-          );
-      }
-
-      returnData.push({
-        json: result,
-        pairedItem: { item: i },
-      });
-
-    } catch (error: any) {
-      if (this.continueOnFail()) {
-        returnData.push({
-          json: { error: error.message },
-          pairedItem: { item: i },
-        });
-      } else {
-        throw new NodeApiError(this.getNode(), error, { itemIndex: i });
-      }
-    }
-  }
-
-  return returnData;
-}
-
-async function executeEventsOperations(
-  this: IExecuteFunctions,
-  items: INodeExecutionData[],
-): Promise<INodeExecutionData[]> {
-  const returnData: INodeExecutionData[] = [];
-  const operation = this.getNodeParameter('operation', 0) as string;
-  const credentials = await this.getCredentials('vechainApi') as any;
-
-  for (let i = 0; i < items.length; i++) {
-    try {
-      let result: any;
-
-      switch (operation) {
-        case 'getEventLogs': {
-          const range = this.getNodeParameter('range.rangeValues', i, {}) as any;
-          const options = this.getNodeParameter('options', i, {}) as any;
-          const criteriaSet = this.getNodeParameter('criteriaSet.criteria', i, []) as any[];
-
-          const body: any = {
-            range: {
-              unit: 'block',
-              from: range.from || 0,
-              to: range.to || 0,
-            },
-            options: {
-              offset: options.offset || 0,
-              limit: options.limit || 100,
-            },
-            criteriaSet: criteriaSet.map((criteria: any) => ({
-              address: criteria.address,
-              topic0: criteria.topics?.[0],
-              topic1: criteria.topics?.[1],
-              topic2: criteria.topics?.[2],
-              topic3: criteria.topics?.[3],
-              topic4: criteria.topics?.[4],
-            })),
-          };
-
-          const requestOptions: any = {
-            method: 'POST',
-            url: `${credentials.baseUrl}/logs/event`,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearerToken}`,
-              'Content-Type': 'application/json',
-            },
-            body,
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(requestOptions) as any;
-          break;
-        }
-
-        case 'getTransferLogs': {
-          const range = this.getNodeParameter('range.rangeValues', i, {}) as any;
-          const options = this.getNodeParameter('options', i, {}) as any;
-          const criteriaSet = this.getNodeParameter('criteriaSet.criteria', i, []) as any[];
-
-          const body: any = {
-            range: {
-              unit: 'block',
-              from: range.from || 0,
-              to: range.to || 0,
-            },
-            options: {
-              offset: options.offset || 0,
-              limit: options.limit || 100,
-            },
-            criteriaSet: criteriaSet.map((criteria: any) => ({
-              txOrigin: criteria.address,
-              sender: criteria.address,
-              recipient: criteria.address,
-            })),
-          };
-
-          const requestOptions: any = {
-            method: 'POST',
-            url: `${credentials.baseUrl}/logs/transfer`,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearerToken}`,
-              'Content-Type': 'application/json',
-            },
-            body,
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(requestOptions) as any;
-          break;
-        }
-
-        case 'subscribeToBlocks': {
-          const pos = this.getNodeParameter('pos', i, 'best') as string;
-
-          const requestOptions: any = {
-            method: 'GET',
-            url: `${credentials.baseUrl}/subscriptions/block`,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearerToken}`,
-            },
-            qs: {
-              pos,
-            },
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(requestOptions) as any;
-          break;
-        }
-
-        case 'subscribeToEvents': {
-          const pos = this.getNodeParameter('pos', i, 'best') as string;
-          const addr = this.getNodeParameter('addr', i, '') as string;
-          const topics = this.getNodeParameter('topics', i, []) as string[];
-
-          const qs: any = { pos };
-          if (addr) qs.addr = addr;
-          if (topics.length > 0) {
-            topics.forEach((topic: string, index: number) => {
-              qs[`t${index}`] = topic;
-            });
-          }
-
-          const requestOptions: any = {
-            method: 'GET',
-            url: `${credentials.baseUrl}/subscriptions/event`,
-            headers: {
-              'Authorization': `Bearer ${credentials.bearerToken}`,
-            },
-            qs,
-            json: true,
-          };
-
-          result = await this.helpers.httpRequest(requestOptions) as any;
-          break;
-        }
-
-        default:
-          throw new NodeOperationError(this.getNode(), `Unknown operation: ${operation}`);
-      }
-
-      returnData.push({ json: result, pairedItem: { item: i } });
-
-    } catch (error: any) {
-      if (this.continueOnFail()) {
-        returnData.push({ json: { error: error.message }, pairedItem: { item: i } });
-      } else {
-        throw new NodeApiError(this.getNode(), error);
-      }
-    }
-  }
-
-  return returnData;
-}
+      returnData.push({ json: result
